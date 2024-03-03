@@ -50,7 +50,7 @@ bool q_insert_head(struct list_head *head, char *s)
         free(new);    /* Release memory for new element */
         return false; /* q_insert_head failed */
     }
-    strncpy(new->value, s); /* Copy string s to new->value */
+    strncpy(new->value, s, strlen(s) + 1); /* Copy string s to new->value */
 
     list_add(&new->list, head);
     return true;
