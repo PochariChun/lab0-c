@@ -36,7 +36,7 @@ void q_free(struct list_head *head)
 bool q_insert_head(struct list_head *head, char *s)
 {
     if (!head) {
-        return NULL;
+        return false;
     }
 
     element_t *new = malloc(sizeof(element_t));
@@ -60,7 +60,7 @@ bool q_insert_head(struct list_head *head, char *s)
 bool q_insert_tail(struct list_head *head, char *s)
 {
     if (!head) {
-        return NULL;
+        return false;
     }
 
     element_t *new = malloc(sizeof(element_t));
@@ -132,7 +132,18 @@ int q_size(struct list_head *head)
 /* Delete the middle node in queue */
 bool q_delete_mid(struct list_head *head)
 {
-    // https://leetcode.com/problems/delete-the-middle-node-of-a-linked-list/
+    if (!head || list_empty(head))
+        return false;
+
+    struct list_head *fast = head->next;
+    struct list_head *slow = head;
+    while (fast && fast->next) {
+        fast = fast->next->next;
+        slow = slow->next;
+    }
+    struct list_head *mid = slow->next;
+    slow->next = slow->next->next;
+    free(mid);
     return true;
 }
 
