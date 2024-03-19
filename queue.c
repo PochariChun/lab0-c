@@ -136,13 +136,14 @@ bool q_delete_mid(struct list_head *head)
         return false;
 
     struct list_head *fast = head->next;
-    struct list_head *slow = head;
-    while (fast && fast->next) {
+    struct list_head *slow = head->next;
+    while (fast != head && fast->next != head) {
         fast = fast->next->next;
         slow = slow->next;
     }
-    struct list_head *mid = slow->next;
-    slow->next = slow->next->next;
+
+    struct list_head *mid = slow;
+    slow->prev->next = slow->next->next;
     free(mid);
     return true;
 }
