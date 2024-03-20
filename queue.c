@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <assert.h>
 #include "queue.h"
-
+#define MAX_LEN 10000
 /* Notice: sometimes, Cppcheck would find the potential NULL pointer bugs,
  * but some of them cannot occur. You can suppress them by adding the
  * following line.
@@ -190,10 +191,8 @@ void q_sort(struct list_head *head, bool descend)
     if (!head || list_is_singular(head))
         return;
 
-    int n = q_size(head);
-    int max_level = 2 * n;
-    element_t *begin[max_level], *end[max_level], *result = NULL, *left = NULL,
-                                                  *right = NULL;
+
+    element_t *begin[MAX_LEN], *end[MAX_LEN], *L, *R;
     element_t pivot;
     int i = 0;
 
@@ -201,11 +200,12 @@ void q_sort(struct list_head *head, bool descend)
     end[0] = list_last_entry(head, element_t, list);
 
     while (i >= 0) {
-        element_t *L = begin[i], *R = end[i];
+        L = begin[i];
+        R = end[i];
 
         if (L != R && &begin[i]->list != head) {
             pivot = *begin[i];
-            if (i == max_level - 1) {
+            if (i == MAX_LEN - 1) {
                 assert(-1);
                 return;
             }
