@@ -185,7 +185,69 @@ void q_reverseK(struct list_head *head, int k)
 }
 
 /* Sort elements of queue in ascending/descending order */
-void q_sort(struct list_head *head, bool descend) {}
+void q_sort(struct list_head *head, bool descend)
+{
+    if (!head || list_is_singular(head))
+        return;
+
+    int n = q_size(head);
+    int max_level = 2 * n;
+    element_t *begin[max_level], *end[max_level], *result = NULL, *left = NULL,
+                                                  *right = NULL;
+    element_t pivot;
+    int i = 0;
+
+    begin[0] = list_first_entry(head, element_t, list);
+    end[0] = list_last_entry(head, element_t, list);
+
+    while (i >= 0) {
+        element_t *L = begin[i], *R = end[i];
+
+        if (L != R && &begin[i]->list != head) {
+            pivot = *begin[i];
+            if (i == max_level - 1) {
+                assert(-1);
+                return;
+            }
+
+            while (L != R) {
+                if (descend) {
+                    while (R->value <= pivot.value && L != R)
+                        R = list_entry(R->list.prev, element_t, list);
+                } else {
+                    while (R->value >= pivot.value && L != R)
+                        R = list_entry(R->list.prev, element_t, list);
+                }
+                if (L != R) {
+                    L->value = R->value;
+                    L = list_entry(L->list.next, element_t, list);
+                }
+
+                if (descend) {
+                    while (L->value >= pivot.value && L != R)
+                        L = list_entry(L->list.next, element_t, list);
+                } else {
+                    while (L->value <= pivot.value && L != R)
+                        L = list_entry(L->list.next, element_t, list);
+                }
+
+                if (L != R) {
+                    R->value = L->value;
+                    R = list_entry(R->list.prev, element_t, list);
+                }
+            }
+
+            L->value = pivot.value;
+
+            begin[i + 1] = list_entry(L->list.next, element_t, list);
+            end[i + 1] = end[i];
+            end[i++] = L;
+
+        } else {
+            i--;
+        }
+    }
+}
 
 /* Remove every node which has a node with a strictly less value anywhere to
  * the right side of it */
