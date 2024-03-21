@@ -4,7 +4,7 @@
 
 #include <assert.h>
 #include "queue.h"
-#define MAX_LEN 10000
+#define MAX_LEN 100000
 /* Notice: sometimes, Cppcheck would find the potential NULL pointer bugs,
  * but some of them cannot occur. You can suppress them by adding the
  * following line.
@@ -248,6 +248,7 @@ void q_sort(struct list_head *head, bool descend)
         }
     }
 }
+
 
 /* Remove every node which has a node with a strictly less value anywhere to
  * the right side of it */
